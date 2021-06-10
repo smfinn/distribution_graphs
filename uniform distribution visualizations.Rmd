@@ -1,0 +1,460 @@
+---
+title: "uniform distribution visualizations"
+author: "Sean Finn"
+date: "6/4/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(ggfortify)
+library(ggthemes)
+library(gridExtra)
+```
+
+# Intro
+Which values do punif, dunif, qunif, and runif return? How do I remember the difference between these?
+
+I find it helpful to have visual representations of distributions as pictures. It is difficult for me to think of distributions, or differences between probability, density, and quantiles without visualizing the shape of the distribution. So I figured it would be helpful to have a visual guide to punif, dunif, qunif, and runif.
+
+
+# Prep data
+
+```{r prep data}
+# Prep the distribution data
+x <- seq(0, 1, 0.001)
+y <- dunif(x)
+uniform <- as.data.frame(cbind(x,y))
+```
+
+
+# punif
+
+```{r punif plot 1}
+# punif plot 1
+# punif(0.5)
+x2 <- c(x[1:501], rep(0,500))
+y2 <- c(y[1:501], rep(0,500))
+
+p <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.5, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous() +
+     labs(title = "punif(0.5)", x = NULL, y = NULL, 
+          subtitle = "P is for Probability") +
+     geom_area(inherit.aes = F, mapping = aes(x=x2, y=y2), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .39, xmax = .48, ymin = 0.1, ymax = 0.2,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.50", x = 0.435, y = 0.15, size = 6) +
+     annotate(geom = "segment", x = 0, xend = 0.5, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+p
+```
+
+```{r punif plot 1.2}
+# punif plot 1.2
+# 1-punif(0.5)
+x9 <- x
+y9 <- c(rep(0,500), y[501:1001])
+
+p1 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.5, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous() +
+     labs(title = "1-punif(0.5)", x = NULL, y = NULL, 
+          subtitle = "P is for Probability") +
+     geom_area(inherit.aes = F, mapping = aes(x=x9, y=y9), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .52, xmax = .61, ymin = 0.1, ymax = 0.2,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.50", x = 0.565, y = 0.15, size = 6) +
+     annotate(geom = "segment", x = 1, xend = 0.5, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+p1
+```
+
+```{r punif plot 2}
+# punif plot 2
+# punif(0.75)
+x3 <- x
+y3 <- c(y[1:750], rep(0,251))
+
+p2 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.75, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "punif(0.75)", subtitle = "P is for probability", 
+          x = NULL, y = NULL) +
+     geom_area(inherit.aes = F, mapping = aes(x=x3, y=y3), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .64, xmax = .73, ymin = 0.1, ymax = 0.2,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.75", x = 0.685, y = 0.15, size = 6) +
+     annotate(geom = "segment", x = 0, xend = 0.75, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+p2
+```
+
+```{r punif plot 3}
+# punif plot 3
+# punif(0.25)
+x4 <- x
+y4 <- c(y[1:251], rep(0,750))
+
+p3 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.25, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "punif(0.25)", subtitle = "P is for probability", 
+          x = NULL, y = NULL) +
+     geom_area(inherit.aes = F, mapping = aes(x=x4, y=y4), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .14, xmax = .23, ymin = 0.1, ymax = 0.2,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.25", x = 0.185, y = 0.15, size = 6) +
+     annotate(geom = "segment", x = 0, xend = 0.25, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+p3
+```
+
+
+# dunif
+
+```{r dunif plot 1}
+# dunif plot 1
+# dunif(0.5)
+
+d1 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.5, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "dunif(0.5)", subtitle = "D is for Distribution", 
+          x = NULL, y = NULL) +
+     annotate(geom = "rect", xmin = .39, xmax = .48, ymin = 0.85, ymax = 0.95,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "1.0", x = 0.435, y = 0.9, size = 6) +
+     annotate(geom = "segment", y = 1, yend = 1, x = -0.05, xend = 0.5, 
+              color = "tomato", size = 1.25, linetype = 1) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+d1
+```
+
+```{r dunif plot 2}
+# dunif plot 2
+# dunif(0.8)
+
+d2 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.8, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "dunif(0.8)", subtitle = "D is for Distribution", 
+          x = NULL, y = NULL) +
+     annotate(geom = "rect", xmin = .69, xmax = .78, ymin = 0.85, ymax = 0.95,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "1.0", x = 0.735, y = 0.9, size = 6) +
+     annotate(geom = "segment", y = 1, yend = 1, x = -0.05, xend = 0.8, 
+              color = "tomato", size = 1.25, linetype = 1) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+d2
+```
+
+```{r dunif plot 3}
+# dunif plot 3
+# dunif(0.2)
+
+d3 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.2, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "dunif(0.2)", subtitle = "D is for Distribution", 
+          x = NULL, y = NULL) +
+     annotate(geom = "rect", xmin = .09, xmax = .18, ymin = 0.85, ymax = 0.95,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "1.0", x = 0.135, y = 0.9, size = 6) +
+     annotate(geom = "segment", y = 1, yend = 1, x = -0.05, xend = 0.2, 
+              color = "tomato", size = 1.25, linetype = 1) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+d3
+```
+
+```{r dunif plot 4}
+# dunif plot 4
+# dunif(1.1)
+
+d4 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 1.11, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "dunif(1.1)", subtitle = "D is for Distribution", 
+          x = NULL, y = NULL) +
+     annotate(geom = "rect", xmin = 1.01, xmax = 1.1, ymin = 0.85, ymax = 0.95,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.0", x = 1.055, y = 0.9, size = 6) +
+     annotate(geom = "segment", y = 1, yend = 1, x = -0.05, xend = 1.11, 
+              color = "tomato", size = 1.25, linetype = 1) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+d4
+```
+
+
+# qunif
+
+```{r qunif plot 1}
+# qunif plot 1
+# qunif(0.5)
+
+q1 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.5, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "qunif(0.5)", x = NULL, y = NULL, 
+          subtitle = "Q is for Quantile") +
+     geom_area(inherit.aes = F, mapping = aes(x=x2, y=y2), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .39, xmax = .48, ymin = 0.45, ymax = 0.55,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.5", x = 0.435, y = 0.5, size = 6) +
+     annotate(geom = "text", label = "50%", x = 0.25, y = 0.05, size = 4) +
+     annotate(geom = "segment", x = 0, xend = 0.5, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+q1
+```
+
+```{r qunif plot 2}
+# qunif plot 2
+# qunif(0.25)
+x5 <- x
+y5 <- c(y[1:250], rep(0,751))
+
+q2 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.25, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "qunif(0.25)", x = NULL, y = NULL, 
+          subtitle = "Q is for Quantile") +
+     geom_area(inherit.aes = F, mapping = aes(x=x5, y=y5), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .14, xmax = .23, ymin = 0.45, ymax = 0.55,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.25", x = 0.185, y = 0.5, size = 6) +
+     annotate(geom = "text", label = "25%", x = 0.1, y = 0.05, size = 4) +
+     annotate(geom = "segment", x = 0, xend = 0.25, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+q2
+```
+
+```{r qunif plot 3}
+# qunif plot 3
+# qunif(0.1)
+x6 <- x
+y6 <- c(y[1:100], rep(0,901))
+
+q3 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.10, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "qunif(0.10)", x = NULL, y = NULL, 
+          subtitle = "Q is for Quantile") +
+     geom_area(inherit.aes = F, mapping = aes(x=x6, y=y6), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .12, xmax = .21, ymin = 0.45, ymax = 0.55,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.10", x = 0.165, y = 0.5, size = 6) +
+     annotate(geom = "text", label = "10%", x = 0.05, y = 0.05, size = 4) +
+     annotate(geom = "segment", x = 0, xend = 0.1, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+q3
+```
+
+```{r qunif plot 4}
+# qunif plot 4
+# qunif(0.75)
+x7 <- x
+y7 <- c(y[1:750], rep(0,251))
+
+q4 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.75, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "qunif(0.75)", x = NULL, y = NULL, 
+          subtitle = "Q is for Quantile") +
+     geom_area(inherit.aes = F, mapping = aes(x=x7, y=y7), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .64, xmax = .73, ymin = 0.45, ymax = 0.55,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.75", x = 0.685, y = 0.5, size = 6) +
+     annotate(geom = "text", label = "75%", x = 0.34, y = 0.05, size = 4) +
+     annotate(geom = "segment", x = 0, xend = 0.75, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+q4
+```
+
+```{r qunif plot 5}
+# qunif plot 5
+# qunif(0.9)
+x8 <- x
+y8 <- c(y[1:900], rep(0,101))
+
+q5 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     geom_vline(xintercept = 0.9, color = "blue", size = 1.3, linetype = 2) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "qunif(0.90)", x = NULL, y = NULL, 
+          subtitle = "Q is for Quantile") +
+     geom_area(inherit.aes = F, mapping = aes(x=x8, y=y8), fill = "tomato", 
+               alpha = 0.2) +
+     annotate(geom = "rect", xmin = .79, xmax = .88, ymin = 0.45, ymax = 0.55,
+              alpha = 1, fill = "white", color = "black") +
+     annotate(geom = "text", label = "0.90", x = 0.835, y = 0.5, size = 6) +
+     annotate(geom = "text", label = "90%", x = 0.44, y = 0.05, size = 4) +
+     annotate(geom = "segment", x = 0, xend = 0.9, y = 0.01, yend = 0.01, 
+              size = 1.1, arrow = arrow(length = unit(3, "mm"))) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5))
+q5
+```
+
+
+# runif
+
+```{r runif plot}
+# runif plot
+# runif(5)
+
+r1 <- ggplot(mapping = aes(x, y), data = uniform) +
+     geom_line(size = 1.3) +
+     scale_x_continuous(n.breaks = 7) +
+     labs(title = "runif(n=5)", subtitle = "R is for Random generation", 
+          x = NULL, y = NULL, caption = "Output: c(0.68, 0.82, 0.31, 0.73, 0.12)") +
+     annotate(geom = "segment", y = 0, yend = 1, x = 0.68, xend = 0.68,
+              color = "blue", linetype = 2) +
+     annotate(geom = "segment", y = 0, yend = 1, x = 0.82, xend = 0.82,
+              color = "blue", linetype = 2) +
+     annotate(geom = "segment", y = 0, yend = 1, x = 0.31, xend = 0.31,
+              color = "blue", linetype = 2) +
+     annotate(geom = "segment", y = 0, yend = 1, x = 0.73, xend = 0.73,
+              color = "blue", linetype = 2) +
+     annotate(geom = "segment", y = 0, yend = 1, x = 0.12, xend = 0.12,
+              color = "blue", linetype = 2) +
+     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = 1, size = 1.1) +
+     annotate(geom = "segment", x = 1, xend = 1, y = 0, yend = 1, size = 1.1) +
+     theme_classic(base_size = 14, base_family = "Courier") +
+     theme(plot.title = element_text(size = 24, face = "bold", hjust = 0.5)) +
+     theme(plot.subtitle = element_text(face = "italic", hjust = 0.5)) +
+     theme(plot.caption = element_text(face = "bold", size = 14, hjust = 0.5))
+r1
+```
+
+
+# save graphs
+
+```{r save graphs}
+# punif graphs separately
+ggsave("~/Desktop/Website materials/unif graphs/punif1.jpg", plot = p, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/punif2.jpg", plot = p2, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/punif3.jpg", plot = p3, width = 10, height = 6)
+
+# punif graphs together
+ggsave("~/Desktop/Website materials/unif graphs/punif_together_horiz.jpg", 
+       arrangeGrob(grobs = list(p3, p, p2), nrow = 1), width = 28, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/punif_together_vert.jpg", 
+       arrangeGrob(grobs = list(p3, p, p2), nrow = 3), width = 10, height = 18)
+
+# punif (0.5) flipped
+ggsave("~/Desktop/Website materials/unif graphs/punif_flipped.jpg", 
+       arrangeGrob(grobs = list(p, p1), nrow = 1), width = 20, height = 6)
+
+# dunif graphs separately
+ggsave("~/Desktop/Website materials/unif graphs/dunif1.jpg", plot = d1, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/dunif2.jpg", plot = d2, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/dunif3.jpg", plot = d3, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/dunif4.jpg", plot = d4, width = 10, height = 6)
+
+# dunif graphs together
+ggsave("~/Desktop/Website materials/unif graphs/dunif_together_horiz.jpg", 
+       arrangeGrob(grobs = list(d3, d1, d2), nrow = 1), width = 28, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/dunif_together_vert.jpg", 
+       arrangeGrob(grobs = list(d3, d1, d2), nrow = 3), width = 10, height = 18)
+
+# qunif graphs separately
+ggsave("~/Desktop/Website materials/unif graphs/qunif1.jpg", plot = q1, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/qunif2.jpg", plot = q2, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/qunif3.jpg", plot = q3, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/qunif4.jpg", plot = q4, width = 10, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/qunif5.jpg", plot = q5, width = 10, height = 6)
+
+# qunif graphs together
+ggsave("~/Desktop/Website materials/unif graphs/qunif_together_horiz.jpg", 
+       arrangeGrob(grobs = list(q3, q2, q1, q4, q5), nrow = 1), width = 34, height = 6)
+ggsave("~/Desktop/Website materials/unif graphs/qunif_together_vert.jpg", 
+       arrangeGrob(grobs = list(q3, q2, q1, q4, q5), nrow = 5), width = 10, height = 30)
+
+# runif graph
+ggsave("~/Desktop/Website materials/unif graphs/runif.jpg", plot = r1, width = 10, height = 6)
+
+# example of each type together
+ggsave("~/Desktop/Website materials/unif graphs/alltogether.jpg", 
+       arrangeGrob(grobs = list(p, d1, q2, r1), nrow = 2), width = 20, height = 12)
+```
+
